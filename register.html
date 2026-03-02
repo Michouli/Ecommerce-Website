@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+  <h2>Create Account</h2>
+
+  <form id="registerForm">
+    <input
+      type="text"
+      name="name"
+      placeholder="Full Name"
+      required
+    />
+
+    <input
+      type="email"
+      name="email"
+      placeholder="Email"
+      required
+    />
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Password (min 6 characters)"
+      required
+    />
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p>
+    Already have an account?
+    <a href="login.html">Login</a>
+  </p>
+
+  <script>
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault(); // stop page refresh
+
+        const form = e.target;
+
+        const res = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            name: form.name.value,
+            email: form.email.value,
+            password: form.password.value
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message);
+          return;
+        }
+
+        alert("Registration successful! Please log in.");
+        window.location.href = "login.html";
+      });
+  </script>
+
+</body>
+</html>
